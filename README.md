@@ -55,16 +55,25 @@ npm install
 
 ### 3. Set up environment variables
 
-The `.env` file has been pre-configured with your credentials. Verify it contains:
+Create a `.env` file in the root directory (copy from `.env.example`):
+
+```bash
+cp .env.example .env
+```
+
+Then edit `.env` and add your actual credentials:
 
 ```env
 PORT=5000
-MONGODB_URI=mongodb+srv://hmacdermott_db_user:mSV5cCLrOTcX94pQ@interactivemap.lfeu7ts.mongodb.net/china-map?appName=interactivemap
-JWT_SECRET=super-secret-jwt-key-change-this-in-production-12345678
-GOOGLE_MAPS_API_KEY=AIzaSyCvhiODJ48fy0abyyvj04hnUqzYSU8RQxU
+MONGODB_URI=your_mongodb_atlas_connection_string
+JWT_SECRET=your_strong_random_secret_key
+GOOGLE_MAPS_API_KEY=your_google_maps_api_key
 ```
 
-**Important for Production**: Change the `JWT_SECRET` to a strong random string before deploying.
+**Important**:
+- Never commit the `.env` file to Git (already in `.gitignore`)
+- Use a strong random string for `JWT_SECRET` (at least 32 characters)
+- See [Configuration Guide](#configuration) below for how to obtain each credential
 
 ### 4. Start the server
 
@@ -247,19 +256,26 @@ Restart the server after backend changes.
 
 ## Deployment
 
-### Preparing for Production
+This application is ready to deploy to **Vercel** with zero configuration!
 
-1. Change `JWT_SECRET` to a strong random string
-2. Update MongoDB Atlas network access to specific IPs
-3. Restrict Google Maps API key to your domain
-4. Set up HTTPS/SSL certificate
-5. Configure CORS for your domain
+### Quick Deploy to Vercel
 
-### Recommended Platforms
+[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone)
+
+For detailed deployment instructions, see **[DEPLOYMENT.md](./DEPLOYMENT.md)**
+
+### Key Features for Production:
+- ✅ Serverless-ready with automatic scaling
+- ✅ Cloudinary integration for image uploads
+- ✅ MongoDB Atlas cloud database
+- ✅ Environment-based configuration (dev vs production)
+- ✅ Automatic HTTPS and CDN
+
+### Other Deployment Options
 
 - **Backend**: Heroku, Railway, Render, DigitalOcean
 - **Database**: MongoDB Atlas (already cloud-hosted)
-- **Frontend**: Can be served by the Express backend
+- **Storage**: Cloudinary (for Vercel) or local filesystem (for traditional hosting)
 
 ## Contributing
 

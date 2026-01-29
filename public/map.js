@@ -197,5 +197,28 @@ window.addEventListener('click', (e) => {
   }
 });
 
+// Load Google Maps API dynamically with API key from server
+async function loadGoogleMapsAPI() {
+  try {
+    // Fetch API key from server
+    const response = await fetch('/api/config/google-maps-key');
+    const data = await response.json();
+
+    if (!data.apiKey) {
+      throw new Error('Google Maps API key not configured');
+    }
+
+    // Load Google Maps script
+    const script = document.createElement('script');
+    script.src = `https://maps.googleapis.com/maps/api/js?key=${data.apiKey}&libraries=places&callback=initMap`;
+    script.async = true;
+    script.defer = true;
+    document.head.appendChild(script);
+  } catch (error) {
+    console.error('Failed to load Google Maps:', error);
+    alert('Failed to load map. Please refresh the page.');
+  }
+}
+
 // Initialize map when page loads
-window.addEventListener('load', initMap);
+window.addEventListener('load', loadGoogleMapsAPI);
