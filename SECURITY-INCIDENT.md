@@ -66,9 +66,14 @@ You MUST rotate (regenerate) these credentials immediately because anyone with a
 
 ### Update Connection String
 
-1. The new connection string format:
+1. Get your connection string from MongoDB Atlas:
+   - Go to **Database** → **Connect** → **Connect your application**
+   - Copy the connection string
+   - Replace `<password>` with your new password
+
+   Format example:
    ```
-   mongodb+srv://hmacdermott_db_user:NEW_PASSWORD_HERE@interactivemap.lfeu7ts.mongodb.net/china-map?appName=interactivemap
+   mongodb+srv://username:new_password@your-cluster.mongodb.net/your-database
    ```
 2. Open your `.env` file
 3. Replace the `MONGODB_URI` with the new connection string
