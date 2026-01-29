@@ -52,7 +52,10 @@ body {
   width: 100%;
   height: 100vh;
   padding-top: 70px;
-  cursor: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="24" height="32" viewBox="0 0 24 32"><path d="M12 0C7.03 0 3 4.03 3 9c0 5.25 9 19 9 19s9-13.75 9-19c0-4.97-4.03-9-9-9zm0 12c-1.66 0-3-1.34-3-3s1.34-3 3-3 3 1.34 3 3-1.34 3-3 3z" fill="%23667eea" stroke="%23ffffff" stroke-width="1"/></svg>') 12 28, crosshair;
+}
+
+#map.pin-cursor {
+  cursor: url('data:image/svg+xml;charset=utf-8,%3Csvg xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22 width%3D%2224%22 height%3D%2232%22 viewBox%3D%220 0 24 32%22%3E%3Cpath d%3D%22M12 0C7.03 0 3 4.03 3 9c0 5.25 9 19 9 19s9-13.75 9-19c0-4.97-4.03-9-9-9zm0 12c-1.66 0-3-1.34-3-3s1.34-3 3-3 3 1.34 3 3-1.34 3-3 3z%22 fill%3D%22%23667eea%22 stroke%3D%22%23ffffff%22 stroke-width%3D%221%22%2F%3E%3C%2Fsvg%3E') 12 28, crosshair;
 }
 
 /* Buttons */

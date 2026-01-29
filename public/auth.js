@@ -99,6 +99,12 @@ document.addEventListener('DOMContentLoaded', () => {
 
       showApp();
 
+      // Add pin cursor to map
+      const mapElement = document.getElementById('map');
+      if (mapElement) {
+        mapElement.classList.add('pin-cursor');
+      }
+
       // Load pins after authentication
       if (typeof loadPins === 'function') {
         await loadPins();
@@ -123,6 +129,12 @@ document.addEventListener('DOMContentLoaded', () => {
       // Clear map markers
       if (typeof clearMarkers === 'function') {
         clearMarkers();
+      }
+
+      // Remove pin cursor from map
+      const mapElement = document.getElementById('map');
+      if (mapElement) {
+        mapElement.classList.remove('pin-cursor');
       }
 
       showAuthModal();

@@ -23,6 +23,11 @@ function initMap() {
     ]
   });
 
+  // Add pin cursor when user is authenticated
+  if (authToken) {
+    document.getElementById('map').classList.add('pin-cursor');
+  }
+
   // Add click listener to map for creating pins
   map.addListener('click', (event) => {
     if (authToken) {
