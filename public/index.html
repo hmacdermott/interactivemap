@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Interactive China Map</title>
+  <link rel="stylesheet" href="styles.css">
+  <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCvhiODJ48fy0abyyvj04hnUqzYSU8RQxU&libraries=places"></script>
+</head>
+<body>
+  <!-- Navigation Header -->
+  <nav class="navbar">
+    <div class="nav-container">
+      <h1 class="nav-title">Interactive China Map</h1>
+      <div class="nav-actions" id="navActions">
+        <span class="user-email" id="userEmail"></span>
+        <button class="btn btn-secondary" id="logoutBtn">Logout</button>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Map Container -->
+  <div id="map"></div>
+
+  <!-- Auth Modal -->
+  <div class="modal" id="authModal">
+    <div class="modal-content">
+      <h2 class="modal-title" id="authTitle">Login</h2>
+
+      <form id="authForm">
+        <div class="form-group">
+          <label for="email">Email</label>
+          <input type="email" id="email" class="form-control" required>
+        </div>
+
+        <div class="form-group">
+          <label for="password">Password</label>
+          <input type="password" id="password" class="form-control" required minlength="6">
+        </div>
+
+        <div class="form-error" id="authError"></div>
+
+        <button type="submit" class="btn btn-primary btn-block" id="authSubmitBtn">Login</button>
+      </form>
+
+      <div class="modal-footer">
+        <p id="authToggleText">Don't have an account?
+          <a href="#" id="authToggle">Register</a>
+        </p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Pin Details Modal -->
+  <div class="modal" id="pinModal">
+    <div class="modal-content">
+      <span class="modal-close" id="closePinModal">&times;</span>
+      <h2 class="modal-title" id="pinModalTitle">Pin Details</h2>
+
+      <div id="pinDetails">
+        <img id="pinImage" class="pin-image" alt="Pin image">
+        <h3 id="pinTitle"></h3>
+        <p id="pinDescription"></p>
+        <p class="pin-meta">
+          <span id="pinUser"></span> •
+          <span id="pinDate"></span>
+        </p>
+        <div class="pin-actions" id="pinActions">
+          <button class="btn btn-secondary" id="editPinBtn">Edit</button>
+          <button class="btn btn-danger" id="deletePinBtn">Delete</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Create/Edit Pin Modal -->
+  <div class="modal" id="pinFormModal">
+    <div class="modal-content">
+      <span class="modal-close" id="closePinFormModal">&times;</span>
+      <h2 class="modal-title" id="pinFormTitle">Create Pin</h2>
+
+      <form id="pinForm">
+        <div class="form-group">
+          <label for="pinTitleInput">Title</label>
+          <input type="text" id="pinTitleInput" class="form-control" maxlength="100" required>
+        </div>
+
+        <div class="form-group">
+          <label for="pinDescriptionInput">Description</label>
+          <textarea id="pinDescriptionInput" class="form-control" rows="4" maxlength="500" required></textarea>
+        </div>
+
+        <div class="form-group">
+          <label for="pinImageInput">Image</label>
+          <input type="file" id="pinImageInput" class="form-control" accept="image/*">
+          <div id="imagePreview"></div>
+        </div>
+
+        <input type="hidden" id="pinLatitude">
+        <input type="hidden" id="pinLongitude">
+        <input type="hidden" id="pinId">
+        <input type="hidden" id="currentImageUrl">
+
+        <div class="form-error" id="pinFormError"></div>
+
+        <button type="submit" class="btn btn-primary btn-block" id="pinFormSubmitBtn">Create Pin</button>
+      </form>
+    </div>
+  </div>
+
+  <!-- Loading Spinner -->
+  <div class="loading" id="loading">
+    <div class="spinner"></div>
+  </div>
+
+  <!-- Scripts -->
+  <script src="auth.js"></script>
+  <script src="map.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
