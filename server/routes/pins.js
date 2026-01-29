@@ -4,6 +4,7 @@ const path = require('path');
 const fs = require('fs');
 const Pin = require('../models/Pin');
 const auth = require('../middleware/auth');
+const cloudinary = require('../config/cloudinary');
 
 const router = express.Router();
 
@@ -41,14 +42,35 @@ const upload = multer({
 });
 
 // Upload image endpoint
-router.post('/upload', auth, upload.single('image'), (req, res) => {
+router.post('/upload', auth, upload.single('image'), async (req, res) => {
   try {
     if (!req.file) {
       return res.status(400).json({ error: 'No image file provided' });
     }
 
-    const imageUrl = `/uploads/${req.file.filename}`;
-    res.json({ imageUrl });
+    // Check if Cloudinary is configured (for production/Vercel)
+    const useCloudinary = process.env.CLOUDINARY_CLOUD_NAME &&
+                          process.env.CLOUDINARY_API_KEY &&
+                          process.env.CLOUDINARY_API_SECRET;
+
+    if (useCloudinary) {
+      // Upload to Cloudinary
+      const result = await cloudinary.uploader.upload(req.file.path, {
+        folder: 'china-map-pins',
+        resource_type: 'auto'
+      });
+
+      // Delete temp file
+      if (fs.existsSync(req.file.path)) {
+        fs.unlinkSync(req.file.path);
+      }
+
+      res.json({ imageUrl: result.secure_url });
+    } else {
+      // Use local file storage (development)
+      const imageUrl = `/uploads/${req.file.filename}`;
+      res.json({ imageUrl });
+    }
   } catch (error) {
     console.error('Upload error:', error);
     res.status(500).json({ error: 'Image upload failed' });
@@ -128,9 +150,23 @@ router.put('/:id', auth, async (req, res) => {
     if (imageUrl) {
       // Delete old image if it exists and is different
       if (pin.imageUrl && pin.imageUrl !== imageUrl) {
-        const oldImagePath = path.join(__dirname, '..', pin.imageUrl);
-        if (fs.existsSync(oldImagePath)) {
-          fs.unlinkSync(oldImagePath);
+        // Check if it's a Cloudinary URL
+        if (pin.imageUrl.includes('cloudinary.com')) {
+          try {
+            // Extract public_id from Cloudinary URL
+            const matches = pin.imageUrl.match(/\/china-map-pins\/([^/.]+)/);
+            if (matches && matches[1]) {
+              await cloudinary.uploader.destroy(`china-map-pins/${matches[1]}`);
+            }
+          } catch (error) {
+            console.error('Cloudinary delete error:', error);
+          }
+        } else {
+          // Delete local file
+          const oldImagePath = path.join(__dirname, '..', pin.imageUrl);
+          if (fs.existsSync(oldImagePath)) {
+            fs.unlinkSync(oldImagePath);
+          }
         }
       }
       pin.imageUrl = imageUrl;
@@ -168,9 +204,23 @@ router.delete('/:id', auth, async (req, res) => {
 
     // Delete image file
     if (pin.imageUrl) {
-      const imagePath = path.join(__dirname, '..', pin.imageUrl);
-      if (fs.existsSync(imagePath)) {
-        fs.unlinkSync(imagePath);
+      // Check if it's a Cloudinary URL
+      if (pin.imageUrl.includes('cloudinary.com')) {
+        try {
+          // Extract public_id from Cloudinary URL
+          const matches = pin.imageUrl.match(/\/china-map-pins\/([^/.]+)/);
+          if (matches && matches[1]) {
+            await cloudinary.uploader.destroy(`china-map-pins/${matches[1]}`);
+          }
+        } catch (error) {
+          console.error('Cloudinary delete error:', error);
+        }
+      } else {
+        // Delete local file
+        const imagePath = path.join(__dirname, '..', pin.imageUrl);
+        if (fs.existsSync(imagePath)) {
+          fs.unlinkSync(imagePath);
+        }
       }
     }
 
